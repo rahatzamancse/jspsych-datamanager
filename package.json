@@ -1,0 +1,16 @@
+{
+  "name": "jspsych-datamanager",
+  "version": "0.0.1",
+  "description": "A package to manage data for jsPsych experiments. Currently Firebase and Supabase are supported.",
+  "keywords": ["jspsych", "psychology", "experiments", "data", "firebase", "supabase"],
+  "author": "Rahat Zaman",
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "pnpm run --filter \"./packages/**\" build",
+    "build:core": "pnpm run --filter \"./packages/core\" build",
+    "build:firebase": "pnpm run --filter \"./packages/firebase\" build",
+    "build:supabase": "pnpm run --filter \"./packages/supabase\" build"
+  }
+}

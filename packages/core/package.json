@@ -1,6 +1,6 @@
 {
   "name": "@jspsych-datamanager/core",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Core functionality for jsPsych-datamanager",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

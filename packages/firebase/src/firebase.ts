@@ -100,7 +100,9 @@ export class FirebaseManager extends DataManager {
      * @throws {Error} If storing the trial fails
      */
     public async addTrialData(trialData: TrialData): Promise<void> {
-        const flattenedData = this.flattenNestedArrays(trialData);
+        // Clean undefined values before flattening
+        const cleanedData = this.removeUndefinedValues(trialData);
+        const flattenedData = this.flattenNestedArrays(cleanedData);
 
         try {
             await updateDoc(this.docRef, {
@@ -169,6 +171,33 @@ export class FirebaseManager extends DataManager {
                 }, {});
             } else if (typeof value === "object" && value !== null) {
                 (result[key] as any) = this.flattenNestedArrays(value);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Removes undefined values from an object to make it Firestore-compatible
+     * @param obj The object to clean
+     * @returns A new object without undefined values
+     */
+    private removeUndefinedValues<T extends object>(obj: T): T {
+        const result = { ...obj } as T;
+        
+        for (const key in result) {
+            const value = result[key];
+            
+            if (value === undefined) {
+                delete result[key];
+            } else if (Array.isArray(value)) {
+                (result[key] as any) = value.map(item => 
+                    item === undefined ? null : 
+                    (typeof item === 'object' && item !== null) ? 
+                    this.removeUndefinedValues(item) : item
+                );
+            } else if (typeof value === "object" && value !== null) {
+                (result[key] as any) = this.removeUndefinedValues(value);
             }
         }
         
